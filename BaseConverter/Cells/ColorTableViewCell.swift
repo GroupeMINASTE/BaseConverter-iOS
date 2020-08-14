@@ -59,16 +59,32 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
     }
     
     @discardableResult
-    func with(base: Base, values: [Int64], delegate: InputChangedDelegate) -> UITableViewCell {
+    func with(base: Base, values: [Int64], source: Source, delegate: InputChangedDelegate) -> UITableViewCell {
         self.base = base
         self.delegate = delegate
         
         // Check validity of input
-        if let first = values.first, first >= 0, first <= 0xFFFFFF {
+        if let first = values.first, values.count == 1, source.base.name == "HEX", first >= 0, source.string.count == 3 || source.string.count == 6 {
             // Extract colors
-            let r = (first & 0xFF0000) >> 16
-            let g = (first & 0xFF00) >> 8
-            let b = (first & 0xFF)
+            let r: Int64
+            let g: Int64
+            let b: Int64
+            
+            // Check source length
+            if source.string.count == 6 {
+                // Read directly
+                r = (first & 0xFF0000) >> 16
+                g = (first & 0xFF00) >> 8
+                b = (first & 0xFF)
+            } else {
+                // Read components and double them
+                let rc = (first & 0xF00) >> 8
+                let gc = (first & 0xF0) >> 4
+                let bc = (first & 0xF)
+                r = rc << 4 | rc
+                g = gc << 4 | gc
+                b = bc << 4 | bc
+            }
             
             // Set texts
             red.field.text = String(r)
@@ -113,8 +129,11 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
             // Update preview
             setColor(red: r, green: g, blue: b)
             
+            // Create value
+            let value = r << 16 | g << 8 | b
+            
             // Update delegate
-            delegate?.inputChanged([r << 16 | g << 8 | b], for: base)
+            delegate?.inputChanged([value], for: base, source: String(value, radix: 16))
         } else {
             // Set invalid color
             setInvalidColor()

@@ -34,7 +34,7 @@ class BaseTableViewCell: UITableViewCell, BaseCell {
     }
     
     @discardableResult
-    func with(base: Base, values: [Int64], delegate: InputChangedDelegate) -> UITableViewCell {
+    func with(base: Base, values: [Int64], source: Source, delegate: InputChangedDelegate) -> UITableViewCell {
         self.base = base
         self.delegate = delegate
         

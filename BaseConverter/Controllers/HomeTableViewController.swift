@@ -12,21 +12,22 @@ import DonateViewController
 class HomeTableViewController: UITableViewController, InputChangedDelegate, DonateViewControllerDelegate {
     
     let bases = [
-        BaseSection(name: "Convert numbers", bases: [
+        BaseSection(name: "Convert a number", bases: [
             Base(id: 1, name: "DEC", value: 10, cell: "baseCell"),
             Base(id: 2, name: "BIN", value: 2, cell: "baseCell"),
             Base(id: 3, name: "OCT", value: 8, cell: "baseCell"),
             Base(id: 4, name: "HEX", value: 16, cell: "baseCell")
         ]),
-        BaseSection(name: "Convert colors", bases: [
+        BaseSection(name: "Convert a color", bases: [
             Base(id: 5, name: "", value: 16, cell: "colorCell")
         ]),
-        BaseSection(name: "Convert texts", bases: [
+        BaseSection(name: "Convert a text", bases: [
             Base(id: 6, name: "TXT", value: 16, cell: "textCell")
         ])
     ]
     
     var currents: [Int64] = [0]
+    var source = Source(base: Base(id: 0, name: "", value: 0, cell: ""), string: "0")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +80,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         
         // Classic cells
         let base = bases[indexPath.section].bases[indexPath.row]
-        return (tableView.dequeueReusableCell(withIdentifier: base.cell, for: indexPath) as! BaseCell).with(base: base, values: currents, delegate: self)
+        return (tableView.dequeueReusableCell(withIdentifier: base.cell, for: indexPath) as! BaseCell).with(base: base, values: currents, source: self.source, delegate: self)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,18 +124,21 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     
     func inputChanged(_ value: String, for base: Base) {
         // Convert values
-        let values = value.split(separator: " ")
+        let values = value.components(separatedBy: .whitespacesAndNewlines)
             .map({ Int64($0, radix: base.value) })
             .filter({ $0 != nil })
             .map({ $0! })
         
         // Call with values
-        inputChanged(values, for: base)
+        inputChanged(values, for: base, source: value)
     }
     
-    func inputChanged(_ values: [Int64], for base: Base) {
+    func inputChanged(_ values: [Int64], for base: Base, source: String) {
         // Update value
         self.currents = values
+        
+        // Update source
+        self.source = Source(base: base, string: source.trimmingCharacters(in: .whitespacesAndNewlines))
         
         // Get cells
         let cells = (0 ..< bases.count).map({ section in
@@ -148,7 +152,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
             // Check cell type and get base
             if let cell = cell as? BaseCell, let cbase = cell.base, base.id != cbase.id {
                 // Update text
-                cell.with(base: cbase, values: self.currents, delegate: self)
+                cell.with(base: cbase, values: self.currents, source: self.source, delegate: self)
             }
         }
     }

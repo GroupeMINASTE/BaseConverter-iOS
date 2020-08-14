@@ -34,7 +34,7 @@ class TextTableViewCell: UITableViewCell, BaseCell {
     }
     
     @discardableResult
-    func with(base: Base, values: [Int64], delegate: InputChangedDelegate) -> UITableViewCell {
+    func with(base: Base, values: [Int64], source: Source, delegate: InputChangedDelegate) -> UITableViewCell {
         self.base = base
         self.delegate = delegate
         
@@ -51,8 +51,8 @@ class TextTableViewCell: UITableViewCell, BaseCell {
     }
     
     @objc func editingChanged(_ sender: Any) {
-        guard let base = base, let input = input.field.text?.data(using: .utf8) else { return }
-        delegate?.inputChanged(input.map({ Int64($0) }), for: base)
+        guard let base = base, let text = input.field.text, let input = text.data(using: .utf8) else { return }
+        delegate?.inputChanged(input.map({ Int64($0) }), for: base, source: text)
     }
     
 }
