@@ -17,6 +17,10 @@
 		6AEDD7EE24E5798200FCB101 /* DonateViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 6AEDD7ED24E5798200FCB101 /* DonateViewController */; };
 		6AEDD7F124E57BB600FCB101 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AEDD7F024E57BB600FCB101 /* StoreKit.framework */; };
 		6AF3D9AA24E689F20091B758 /* ColorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9A924E689F20091B758 /* ColorTableViewCell.swift */; };
+		6AF3D9AC24E6A6FC0091B758 /* BaseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9AB24E6A6FC0091B758 /* BaseSection.swift */; };
+		6AF3D9B024E6AD720091B758 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9AF24E6AD720091B758 /* BaseCell.swift */; };
+		6AF3D9B224E6AD940091B758 /* InputChangedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9B124E6AD940091B758 /* InputChangedDelegate.swift */; };
+		6AF3D9B424E6ADA50091B758 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9B324E6ADA50091B758 /* InputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,10 @@
 		6AEDD7EA24E577C700FCB101 /* LabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelTableViewCell.swift; sourceTree = "<group>"; };
 		6AEDD7F024E57BB600FCB101 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6AF3D9A924E689F20091B758 /* ColorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTableViewCell.swift; sourceTree = "<group>"; };
+		6AF3D9AB24E6A6FC0091B758 /* BaseSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSection.swift; sourceTree = "<group>"; };
+		6AF3D9AF24E6AD720091B758 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
+		6AF3D9B124E6AD940091B758 /* InputChangedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputChangedDelegate.swift; sourceTree = "<group>"; };
+		6AF3D9B324E6ADA50091B758 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +67,7 @@
 			children = (
 				6AE60C9721BE729D00E94D0E /* AppDelegate.swift */,
 				6A555A8624E55E2700F0DBE7 /* Base.swift */,
+				6AF3D9AB24E6A6FC0091B758 /* BaseSection.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -95,7 +104,9 @@
 			children = (
 				6A2DD81424E55BB400767E36 /* Cells */,
 				6A2DD81224E55BA700767E36 /* Controllers */,
+				6AF3D9AE24E6AD4C0091B758 /* Protocols */,
 				6A2DD81324E55BAD00767E36 /* Utils */,
+				6AF3D9AD24E6AD470091B758 /* Views */,
 				6AE60C9E21BE729E00E94D0E /* Assets.xcassets */,
 				6AE60CA021BE729E00E94D0E /* LaunchScreen.storyboard */,
 				6AE60CA321BE729E00E94D0E /* Info.plist */,
@@ -109,6 +120,23 @@
 				6AEDD7F024E57BB600FCB101 /* StoreKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6AF3D9AD24E6AD470091B758 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6AF3D9B324E6ADA50091B758 /* InputView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6AF3D9AE24E6AD4C0091B758 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6AF3D9AF24E6AD720091B758 /* BaseCell.swift */,
+				6AF3D9B124E6AD940091B758 /* InputChangedDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,10 +216,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6AF3D9B224E6AD940091B758 /* InputChangedDelegate.swift in Sources */,
 				6A555A8724E55E2700F0DBE7 /* Base.swift in Sources */,
+				6AF3D9AC24E6A6FC0091B758 /* BaseSection.swift in Sources */,
 				6AEDD7EB24E577C700FCB101 /* LabelTableViewCell.swift in Sources */,
 				6AE60CAC21BE75DD00E94D0E /* BaseTableViewCell.swift in Sources */,
+				6AF3D9B024E6AD720091B758 /* BaseCell.swift in Sources */,
 				6AE60C9821BE729D00E94D0E /* AppDelegate.swift in Sources */,
+				6AF3D9B424E6ADA50091B758 /* InputView.swift in Sources */,
 				6AE60CAA21BE74CB00E94D0E /* HomeTableViewController.swift in Sources */,
 				6AF3D9AA24E689F20091B758 /* ColorTableViewCell.swift in Sources */,
 			);

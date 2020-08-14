@@ -8,10 +8,9 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
+class BaseTableViewCell: UITableViewCell, BaseCell {
     
-    let label = UILabel()
-    let field = UITextField()
+    let input = InputView()
     var base: Base?
     weak var delegate: InputChangedDelegate?
     
@@ -20,29 +19,14 @@ class BaseTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
         
         selectionStyle = .none
         
-        contentView.addSubview(label)
-        contentView.addSubview(field)
+        contentView.addSubview(input)
         
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
-        label.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-        label.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        label.setContentHuggingPriority(.required, for: .horizontal)
-        label.adjustsFontSizeToFitWidth = true
-        label.font = UIFont(name: "Courier", size: 17)
-        
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
-        field.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 4).isActive = true
-        field.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
-        field.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
-        field.setContentCompressionResistancePriority(.required, for: .horizontal)
-        field.font = UIFont(name: "Courier", size: 17)
-        field.autocapitalizationType = .none
-        field.returnKeyType = .done
-        field.delegate = self
-        field.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        input.translatesAutoresizingMaskIntoConstraints = false
+        input.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
+        input.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
+        input.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
+        input.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
+        input.addTargetForEditingChanged(self, action: #selector(editingChanged))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,32 +38,21 @@ class BaseTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
         self.base = base
         self.delegate = delegate
         
-        label.text = "\(base.name):"
-        field.text = values.map({ String($0, radix: base.value, uppercase: true) }).joined(separator: " ")
+        input.label.text = "\(base.name):"
+        input.field.text = values.map({ String($0, radix: base.value, uppercase: true) }).joined(separator: " ")
         
         return self
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected {
-            field.becomeFirstResponder()
+            input.field.becomeFirstResponder()
         }
     }
     
     @objc func editingChanged(_ sender: Any) {
-        guard let base = base, let input = field.text else { return }
+        guard let base = base, let input = input.field.text else { return }
         delegate?.inputChanged(input, for: base)
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        field.endEditing(true)
-        return false
-    }
-    
-}
-
-protocol InputChangedDelegate: class {
-    
-    func inputChanged(_ value: String, for base: Base)
     
 }

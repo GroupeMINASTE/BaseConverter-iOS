@@ -12,15 +12,15 @@ import DonateViewController
 class HomeTableViewController: UITableViewController, InputChangedDelegate, DonateViewControllerDelegate {
     
     let bases = [
-        [
+        BaseSection(name: "Convert numbers", bases: [
             Base(id: 1, name: "DEC", value: 10, cell: "baseCell"),
             Base(id: 2, name: "BIN", value: 2, cell: "baseCell"),
             Base(id: 3, name: "OCT", value: 8, cell: "baseCell"),
             Base(id: 4, name: "HEX", value: 16, cell: "baseCell")
-        ],
-        [
+        ]),
+        BaseSection(name: "Convert colors", bases: [
             Base(id: 5, name: "", value: 16, cell: "colorCell")
-        ]
+        ])
     ]
     
     var currents: [Int64] = [0]
@@ -49,7 +49,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         
         // Select first cell
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BaseTableViewCell {
-            cell.field.becomeFirstResponder()
+            cell.input.field.becomeFirstResponder()
         }
     }
 
@@ -60,11 +60,11 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == bases.count ? 2 : bases[section].count
+        return section == bases.count ? 2 : bases[section].bases.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "Convert numbers" : section == 1 ? "Special values" : "More"
+        return section == bases.count ? "More" : bases[section].name
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -74,7 +74,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         }
         
         // Classic cells
-        let base = bases[indexPath.section][indexPath.row]
+        let base = bases[indexPath.section].bases[indexPath.row]
         return (tableView.dequeueReusableCell(withIdentifier: base.cell, for: indexPath) as! BaseCell).with(base: base, values: currents, delegate: self)
     }
     
@@ -126,7 +126,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         
         // Get cells
         let cells = (0 ..< bases.count).map({ section in
-            (0 ..< bases[section].count).map({ row in
+            (0 ..< bases[section].bases.count).map({ row in
                 tableView.cellForRow(at: IndexPath(row: row, section: section))
             })
         }).reduce([], +)
@@ -151,13 +151,4 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         print("Donation failed.")
     }
 
-}
-
-protocol BaseCell: class {
-    
-    var base: Base? { get }
-    
-    @discardableResult
-    func with(base: Base, values: [Int64], delegate: InputChangedDelegate) -> UITableViewCell
-    
 }

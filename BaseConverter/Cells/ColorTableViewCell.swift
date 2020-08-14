@@ -10,12 +10,9 @@ import UIKit
 
 class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
     
-    let rlabel = UILabel()
-    let glabel = UILabel()
-    let blabel = UILabel()
-    let red = UITextField()
-    let green = UITextField()
-    let blue = UITextField()
+    let red = InputView()
+    let green = InputView()
+    let blue = InputView()
     let preview = UIView()
     var base: Base?
     weak var delegate: InputChangedDelegate?
@@ -27,25 +24,9 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
         
         let stackview = UIStackView()
         stackview.distribution = .fillEqually
-        
-        let rstack = UIStackView()
-        rstack.distribution = .fillEqually
-        rstack.addArrangedSubview(rlabel)
-        rstack.addArrangedSubview(red)
-        
-        let gstack = UIStackView()
-        gstack.distribution = .fillEqually
-        gstack.addArrangedSubview(glabel)
-        gstack.addArrangedSubview(green)
-        
-        let bstack = UIStackView()
-        bstack.distribution = .fillEqually
-        bstack.addArrangedSubview(blabel)
-        bstack.addArrangedSubview(blue)
-        
-        stackview.addArrangedSubview(rstack)
-        stackview.addArrangedSubview(gstack)
-        stackview.addArrangedSubview(bstack)
+        stackview.addArrangedSubview(red)
+        stackview.addArrangedSubview(green)
+        stackview.addArrangedSubview(blue)
         
         contentView.addSubview(stackview)
         contentView.addSubview(preview)
@@ -64,33 +45,13 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
         preview.heightAnchor.constraint(equalToConstant: 17).isActive = true
         preview.layer.cornerRadius = 3
         
-        rlabel.font = UIFont(name: "Courier", size: 17)
-        glabel.font = UIFont(name: "Courier", size: 17)
-        blabel.font = UIFont(name: "Courier", size: 17)
+        red.label.text = "R:"
+        green.label.text = "G:"
+        blue.label.text = "B:"
         
-        rlabel.text = "R:"
-        glabel.text = "G:"
-        blabel.text = "B:"
-        
-        red.font = UIFont(name: "Courier", size: 17)
-        green.font = UIFont(name: "Courier", size: 17)
-        blue.font = UIFont(name: "Courier", size: 17)
-        
-        red.autocapitalizationType = .none
-        green.autocapitalizationType = .none
-        blue.autocapitalizationType = .none
-        
-        red.returnKeyType = .done
-        green.returnKeyType = .done
-        blue.returnKeyType = .done
-        
-        red.delegate = self
-        green.delegate = self
-        blue.delegate = self
-        
-        red.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-        green.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
-        blue.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        red.addTargetForEditingChanged(self, action: #selector(editingChanged))
+        green.addTargetForEditingChanged(self, action: #selector(editingChanged))
+        blue.addTargetForEditingChanged(self, action: #selector(editingChanged))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -110,17 +71,17 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
             let b = (first & 0xFF)
             
             // Set texts
-            red.text = String(r)
-            green.text = String(g)
-            blue.text = String(b)
+            red.field.text = String(r)
+            green.field.text = String(g)
+            blue.field.text = String(b)
             
             // Set preview color
             setColor(red: r, green: g, blue: b)
         } else {
             // Not valid, empty values
-            red.text = ""
-            green.text = ""
-            blue.text = ""
+            red.field.text = ""
+            green.field.text = ""
+            blue.field.text = ""
             
             // Set preview color
             setInvalidColor()
@@ -145,7 +106,7 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
     
     @objc func editingChanged(_ sender: Any) {
         // Get base and values
-        guard let base = base, let rtext = red.text, let gtext = green.text, let btext = blue.text else { return }
+        guard let base = base, let rtext = red.field.text, let gtext = green.field.text, let btext = blue.field.text else { return }
         
         // Check values
         if let r = Int64(rtext), let g = Int64(gtext), let b = Int64(btext), r >= 0, g >= 0, b >= 0, r <= 255, g <= 255, b <= 255 {
