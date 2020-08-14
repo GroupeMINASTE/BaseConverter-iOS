@@ -34,7 +34,7 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
         stackview.translatesAutoresizingMaskIntoConstraints = false
         stackview.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
         stackview.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-        stackview.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
+        stackview.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
         
         preview.translatesAutoresizingMaskIntoConstraints = false
         preview.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true

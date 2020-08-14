@@ -22,7 +22,7 @@ class InputView: UIView, UITextFieldDelegate {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.topAnchor.constraint(equalTo: topAnchor).isActive = true
         label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        label.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.adjustsFontSizeToFitWidth = true
