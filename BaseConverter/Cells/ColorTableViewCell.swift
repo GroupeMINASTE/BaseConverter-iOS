@@ -114,7 +114,7 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
             setColor(red: r, green: g, blue: b)
             
             // Update delegate
-            delegate?.inputChanged(String(r << 16 | g << 8 | b, radix: 16), for: base)
+            delegate?.inputChanged([r << 16 | g << 8 | b], for: base)
         } else {
             // Set invalid color
             setInvalidColor()

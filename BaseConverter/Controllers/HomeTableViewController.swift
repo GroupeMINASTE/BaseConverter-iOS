@@ -20,6 +20,9 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         ]),
         BaseSection(name: "Convert colors", bases: [
             Base(id: 5, name: "", value: 16, cell: "colorCell")
+        ]),
+        BaseSection(name: "Convert texts", bases: [
+            Base(id: 6, name: "TXT", value: 16, cell: "textCell")
         ])
     ]
     
@@ -42,6 +45,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: "baseCell")
         tableView.register(ColorTableViewCell.self, forCellReuseIdentifier: "colorCell")
         tableView.register(LabelTableViewCell.self, forCellReuseIdentifier: "labelCell")
+        tableView.register(TextTableViewCell.self, forCellReuseIdentifier: "textCell")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -80,7 +84,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // More cells
-        if indexPath.section == 2 {
+        if indexPath.section == bases.count {
             // Groupe MINASTE
             if indexPath.row == 0 {
                 // Open URL
@@ -118,11 +122,19 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     }
     
     func inputChanged(_ value: String, for base: Base) {
-        // Update value
-        self.currents = value.split(separator: " ")
+        // Convert values
+        let values = value.split(separator: " ")
             .map({ Int64($0, radix: base.value) })
             .filter({ $0 != nil })
             .map({ $0! })
+        
+        // Call with values
+        inputChanged(values, for: base)
+    }
+    
+    func inputChanged(_ values: [Int64], for base: Base) {
+        // Update value
+        self.currents = values
         
         // Get cells
         let cells = (0 ..< bases.count).map({ section in

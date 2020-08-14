@@ -21,6 +21,7 @@
 		6AF3D9B024E6AD720091B758 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9AF24E6AD720091B758 /* BaseCell.swift */; };
 		6AF3D9B224E6AD940091B758 /* InputChangedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9B124E6AD940091B758 /* InputChangedDelegate.swift */; };
 		6AF3D9B424E6ADA50091B758 /* InputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9B324E6ADA50091B758 /* InputView.swift */; };
+		6AF3D9B624E6C0900091B758 /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF3D9B524E6C0900091B758 /* TextTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		6AF3D9AF24E6AD720091B758 /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		6AF3D9B124E6AD940091B758 /* InputChangedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputChangedDelegate.swift; sourceTree = "<group>"; };
 		6AF3D9B324E6ADA50091B758 /* InputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputView.swift; sourceTree = "<group>"; };
+		6AF3D9B524E6C0900091B758 /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				6AE60CAB21BE75DD00E94D0E /* BaseTableViewCell.swift */,
 				6AF3D9A924E689F20091B758 /* ColorTableViewCell.swift */,
 				6AEDD7EA24E577C700FCB101 /* LabelTableViewCell.swift */,
+				6AF3D9B524E6C0900091B758 /* TextTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				6A555A8724E55E2700F0DBE7 /* Base.swift in Sources */,
 				6AF3D9AC24E6A6FC0091B758 /* BaseSection.swift in Sources */,
 				6AEDD7EB24E577C700FCB101 /* LabelTableViewCell.swift in Sources */,
+				6AF3D9B624E6C0900091B758 /* TextTableViewCell.swift in Sources */,
 				6AE60CAC21BE75DD00E94D0E /* BaseTableViewCell.swift in Sources */,
 				6AF3D9B024E6AD720091B758 /* BaseCell.swift in Sources */,
 				6AE60C9821BE729D00E94D0E /* AppDelegate.swift in Sources */,

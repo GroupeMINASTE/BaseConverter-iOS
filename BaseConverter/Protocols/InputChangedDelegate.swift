@@ -12,4 +12,6 @@ protocol InputChangedDelegate: class {
     
     func inputChanged(_ value: String, for base: Base)
     
+    func inputChanged(_ values: [Int64], for base: Base)
+    
 }
