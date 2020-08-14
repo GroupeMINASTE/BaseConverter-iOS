@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell, UITextFieldDelegate {
+class BaseTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
     
     let label = UILabel()
     let field = UITextField()
@@ -50,17 +50,12 @@ class BaseTableViewCell: UITableViewCell, UITextFieldDelegate {
     }
     
     @discardableResult
-    func with(base: Base, value: Int64?, delegate: InputChangedDelegate) -> BaseTableViewCell {
+    func with(base: Base, values: [Int64], delegate: InputChangedDelegate) -> UITableViewCell {
         self.base = base
         self.delegate = delegate
         
         label.text = "\(base.name):"
-        
-        if let value = value {
-            field.text = String(value, radix: base.value, uppercase: true)
-        } else {
-            field.text = ""
-        }
+        field.text = values.map({ String($0, radix: base.value, uppercase: true) }).joined(separator: " ")
         
         return self
     }

@@ -12,12 +12,18 @@ import DonateViewController
 class HomeTableViewController: UITableViewController, InputChangedDelegate, DonateViewControllerDelegate {
     
     let bases = [
-        Base(name: "DEC", value: 10),
-        Base(name: "BIN", value: 2),
-        Base(name: "OCT", value: 8),
-        Base(name: "HEX", value: 16)
+        [
+            Base(id: 1, name: "DEC", value: 10, cell: "baseCell"),
+            Base(id: 2, name: "BIN", value: 2, cell: "baseCell"),
+            Base(id: 3, name: "OCT", value: 8, cell: "baseCell"),
+            Base(id: 4, name: "HEX", value: 16, cell: "baseCell")
+        ],
+        [
+            Base(id: 5, name: "", value: 16, cell: "colorCell")
+        ]
     ]
-    var current: Int64? = 0
+    
+    var currents: [Int64] = [0]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +40,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         
         // Register cells
         tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: "baseCell")
+        tableView.register(ColorTableViewCell.self, forCellReuseIdentifier: "colorCell")
         tableView.register(LabelTableViewCell.self, forCellReuseIdentifier: "labelCell")
     }
     
@@ -49,30 +56,31 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return bases.count + 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? bases.count : 2
+        return section == bases.count ? 2 : bases[section].count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "Convert" : "More"
+        return section == 0 ? "Convert numbers" : section == 1 ? "Special values" : "More"
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // More cells
-        if indexPath.section == 1 {
+        if indexPath.section == bases.count {
             return (tableView.dequeueReusableCell(withIdentifier: "labelCell", for: indexPath) as! LabelTableViewCell).with(text: indexPath.row == 0 ? "Groupe MINASTE" : "Donate", accessory: .disclosureIndicator)
         }
         
-        // Base cell
-        return (tableView.dequeueReusableCell(withIdentifier: "baseCell", for: indexPath) as! BaseTableViewCell).with(base: bases[indexPath.row], value: current, delegate: self)
+        // Classic cells
+        let base = bases[indexPath.section][indexPath.row]
+        return (tableView.dequeueReusableCell(withIdentifier: base.cell, for: indexPath) as! BaseCell).with(base: base, values: currents, delegate: self)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // More cells
-        if indexPath.section == 1 {
+        if indexPath.section == 2 {
             // Groupe MINASTE
             if indexPath.row == 0 {
                 // Open URL
@@ -111,14 +119,24 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     
     func inputChanged(_ value: String, for base: Base) {
         // Update value
-        self.current = Int64(value, radix: base.value)
+        self.currents = value.split(separator: " ")
+            .map({ Int64($0, radix: base.value) })
+            .filter({ $0 != nil })
+            .map({ $0! })
+        
+        // Get cells
+        let cells = (0 ..< bases.count).map({ section in
+            (0 ..< bases[section].count).map({ row in
+                tableView.cellForRow(at: IndexPath(row: row, section: section))
+            })
+        }).reduce([], +)
         
         // Update tableView
-        for id in 0 ..< bases.count {
+        for cell in cells {
             // Check cell type and get base
-            if let cell = tableView.cellForRow(at: IndexPath(row: id, section: 0)) as? BaseTableViewCell, let cbase = cell.base, base.value != cbase.value {
+            if let cell = cell as? BaseCell, let cbase = cell.base, base.id != cbase.id {
                 // Update text
-                cell.with(base: cbase, value: self.current, delegate: self)
+                cell.with(base: cbase, values: self.currents, delegate: self)
             }
         }
     }
@@ -133,4 +151,13 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         print("Donation failed.")
     }
 
+}
+
+protocol BaseCell: class {
+    
+    var base: Base? { get }
+    
+    @discardableResult
+    func with(base: Base, values: [Int64], delegate: InputChangedDelegate) -> UITableViewCell
+    
 }

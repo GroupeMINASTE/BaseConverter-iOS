@@ -10,7 +10,9 @@ import Foundation
 
 struct Base {
 
+    var id: Int
     var name: String
     var value: Int
+    var cell: String
     
 }
