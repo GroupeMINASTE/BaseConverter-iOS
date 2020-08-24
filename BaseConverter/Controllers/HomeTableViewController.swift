@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 import DonateViewController
 
 class HomeTableViewController: UITableViewController, InputChangedDelegate, DonateViewControllerDelegate {
@@ -34,10 +35,10 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         tableView.rowHeight = UITableView.automaticDimension
         
         // Register cells
-        tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: "baseCell")
-        tableView.register(ColorTableViewCell.self, forCellReuseIdentifier: "colorCell")
         tableView.register(LabelTableViewCell.self, forCellReuseIdentifier: "labelCell")
-        tableView.register(TextTableViewCell.self, forCellReuseIdentifier: "textCell")
+        tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: CellType.base.id)
+        tableView.register(ColorTableViewCell.self, forCellReuseIdentifier: CellType.color.id)
+        tableView.register(TextTableViewCell.self, forCellReuseIdentifier: CellType.text.id)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -146,6 +147,9 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
                 cell.with(base: cbase, values: self.currents, source: self.source, delegate: self)
             }
         }
+        
+        // Check for review
+        self.checkForReview()
     }
     
     func donateViewController(_ controller: DonateViewController, didDonationSucceed donation: Donation) {
@@ -156,6 +160,20 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
     
     func donateViewController(_ controller: DonateViewController, didDonationFailed donation: Donation) {
         print("Donation failed.")
+    }
+    
+    func checkForReview() {
+        // Check number of conversions to ask for a review
+        let datas = UserDefaults.standard
+        let conversionsCount = datas.integer(forKey: "conversionsCount") + 1
+        datas.set(conversionsCount, forKey: "conversionsCount")
+        datas.synchronize()
+        
+        if conversionsCount % 100 == 0 {
+            if #available(iOS 10.3, *) {
+                SKStoreReviewController.requestReview()
+            }
+        }
     }
 
 }
