@@ -12,22 +12,13 @@ import DonateViewController
 class HomeTableViewController: UITableViewController, InputChangedDelegate, DonateViewControllerDelegate {
     
     let bases = [
-        BaseSection(name: "Convert a number", bases: [
-            Base(id: 1, name: "DEC", value: 10, cell: "baseCell"),
-            Base(id: 2, name: "BIN", value: 2, cell: "baseCell"),
-            Base(id: 3, name: "OCT", value: 8, cell: "baseCell"),
-            Base(id: 4, name: "HEX", value: 16, cell: "baseCell")
-        ]),
-        BaseSection(name: "Convert a color", bases: [
-            Base(id: 5, name: "", value: 16, cell: "colorCell")
-        ]),
-        BaseSection(name: "Convert a text", bases: [
-            Base(id: 6, name: "TXT", value: 16, cell: "textCell")
-        ])
+        BaseSection(name: "Convert a number", bases: [.dec, .bin, .oct, .hex]),
+        BaseSection(name: "Convert a color", bases: [.rgb]),
+        BaseSection(name: "Convert a text", bases: [.txt])
     ]
     
     var currents: [Int64] = [0]
-    var source = Source(base: Base(id: 0, name: "", value: 0, cell: ""), string: "0")
+    var source = Source(base: Base(id: 0, name: "", value: 0, cell: .base), string: "0")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +71,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         
         // Classic cells
         let base = bases[indexPath.section].bases[indexPath.row]
-        return (tableView.dequeueReusableCell(withIdentifier: base.cell, for: indexPath) as! BaseCell).with(base: base, values: currents, source: self.source, delegate: self)
+        return (tableView.dequeueReusableCell(withIdentifier: base.cell.id, for: indexPath) as! BaseCell).with(base: base, values: currents, source: self.source, delegate: self)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -39,7 +39,7 @@ class BaseTableViewCell: UITableViewCell, BaseCell {
         self.delegate = delegate
         
         input.label.text = "\(base.name):"
-        input.field.text = values.map({ String($0, radix: base.value, uppercase: true) }).joined(separator: " ")
+        input.field.text = base.cell.processor(base, values, source).first
         
         return self
     }

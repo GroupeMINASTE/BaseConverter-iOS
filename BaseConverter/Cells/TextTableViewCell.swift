@@ -39,7 +39,7 @@ class TextTableViewCell: UITableViewCell, BaseCell {
         self.delegate = delegate
         
         input.label.text = "\(base.name):"
-        input.field.text = String(bytes: values.filter({ $0 > 0 && $0 <= UInt8.max }).map({ UInt8($0) }), encoding: .utf8)
+        input.field.text = base.cell.processor(base, values, source).first
         
         return self
     }

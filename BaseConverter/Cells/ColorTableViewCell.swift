@@ -64,35 +64,15 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
         self.delegate = delegate
         
         // Check validity of input
-        if let first = values.first, values.count == 1, source.base.name == "HEX", first >= 0, source.string.count == 3 || source.string.count == 6 {
-            // Extract colors
-            let r: Int64
-            let g: Int64
-            let b: Int64
-            
-            // Check source length
-            if source.string.count == 6 {
-                // Read directly
-                r = (first & 0xFF0000) >> 16
-                g = (first & 0xFF00) >> 8
-                b = (first & 0xFF)
-            } else {
-                // Read components and double them
-                let rc = (first & 0xF00) >> 8
-                let gc = (first & 0xF0) >> 4
-                let bc = (first & 0xF)
-                r = rc << 4 | rc
-                g = gc << 4 | gc
-                b = bc << 4 | bc
-            }
-            
+        let output = base.cell.processor(base, values, source)
+        if output.count == 3 {
             // Set texts
-            red.field.text = String(r)
-            green.field.text = String(g)
-            blue.field.text = String(b)
+            red.field.text = output[0]
+            green.field.text = output[1]
+            blue.field.text = output[2]
             
             // Set preview color
-            setColor(red: r, green: g, blue: b)
+            setColor(red: Int64(output[0]), green: Int64(output[1]), blue: Int64(output[2]))
         } else {
             // Not valid, empty values
             red.field.text = ""
@@ -100,18 +80,18 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
             blue.field.text = ""
             
             // Set preview color
-            setInvalidColor()
+            setColor(red: nil, green: nil, blue: nil)
         }
         
         return self
     }
     
-    func setColor(red: Int64, green: Int64, blue: Int64) {
-        preview.backgroundColor = UIColor(red: CGFloat(red) / 255, green: CGFloat(green) / 255, blue: CGFloat(blue) / 255, alpha: 1)
-    }
-    
-    func setInvalidColor() {
-        preview.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+    func setColor(red: Int64?, green: Int64?, blue: Int64?) {
+        if let red = red, let green = green, let blue = blue {
+            preview.backgroundColor = UIColor(red: CGFloat(red) / 255, green: CGFloat(green) / 255, blue: CGFloat(blue) / 255, alpha: 1)
+        } else {
+            preview.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        }
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -136,7 +116,7 @@ class ColorTableViewCell: UITableViewCell, UITextFieldDelegate, BaseCell {
             delegate?.inputChanged([value], for: base, source: String(value, radix: 16))
         } else {
             // Set invalid color
-            setInvalidColor()
+            setColor(red: nil, green: nil, blue: nil)
             
             // Invalid values
             delegate?.inputChanged("", for: base)
