@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol BaseCell: class {
+protocol BaseCell: AnyObject {
     
     var base: Base? { get }
     

@@ -9,6 +9,7 @@
 import UIKit
 import StoreKit
 import DonateViewController
+import DigiAnalytics
 
 class HomeTableViewController: UITableViewController, InputChangedDelegate, DonateViewControllerDelegate {
     
@@ -48,6 +49,15 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? BaseTableViewCell {
             cell.input.field.becomeFirstResponder()
         }
+        
+        // Analytics
+        let datas = UserDefaults.standard
+        if !datas.bool(forKey: "first_open") {
+            DigiAnalytics.shared.send(path: "first_open")
+            datas.set(true, forKey: "first_open")
+            datas.synchronize()
+        }
+        DigiAnalytics.shared.send(path: "open")
     }
 
     // MARK: - Table view data source
@@ -110,6 +120,7 @@ class HomeTableViewController: UITableViewController, InputChangedDelegate, Dona
                 
                 // Show it
                 navigationController?.pushViewController(controller, animated: true)
+                DigiAnalytics.shared.send(path: "donate")
             }
         }
     }

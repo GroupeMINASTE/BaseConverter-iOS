@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol InputChangedDelegate: class {
+protocol InputChangedDelegate: AnyObject {
     
     func inputChanged(_ value: String, for base: Base)
     
